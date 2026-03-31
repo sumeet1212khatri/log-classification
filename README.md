@@ -67,12 +67,11 @@ Upload a CSV containing source and log_message columns. The system will process 
 
 
 ```
-
 import csv
 import random
 
-# Teresystems ke sources
-sources = ["ModernCRM", "ModernHR", "BillingSystem", "AnalyticsEngine", "ThirdPartyAPI", "LegacyCRM"]
+# Teresystems ke sources (LegacyCRM ko alag nikal diya taaki probability control kar sakein)
+regular_sources = ["ModernCRM", "ModernHR", "BillingSystem", "AnalyticsEngine", "ThirdPartyAPI"]
 
 # Tier 1: Regex logs (Fast & Standard)
 regex_logs = [
@@ -100,17 +99,21 @@ legacy_logs = [
 ]
 
 data = []
-# Generate exactly 200 logs
-for i in range(200):
-    source = random.choice(sources)
-    
-    # Routing logic ke hisaab se logs distribute karna
-    if source == "LegacyCRM":
+# Generate 20,000 logs taaki 0.3% ratio theek se reflect ho (20k ka 0.3% = 60 logs)
+TOTAL_LOGS = 20000
+
+for i in range(TOTAL_LOGS):
+    # NAYA ROUTING LOGIC: Seedha probability based control
+    if random.random() < 0.003:  # Sirf 0.3% chance LegacyCRM aane ka
+        source = "LegacyCRM"
         template = random.choice(legacy_logs)
-    elif random.random() < 0.3:  # 30% chance for Regex logs
-        template = random.choice(regex_logs)
-    else:                        # 70% chance for BERT logs
-        template = random.choice(bert_logs)
+    else:
+        # Baaki 99.7% time normal sources aayenge
+        source = random.choice(regular_sources)
+        if random.random() < 0.3:  # Usme se 30% chance Regex ka
+            template = random.choice(regex_logs)
+        else:                      # Usme se 70% chance BERT ka
+            template = random.choice(bert_logs)
         
     # Variables ko random numbers se replace karna
     msg = template.format(
@@ -128,7 +131,7 @@ with open("test_logs.csv", "w", newline="", encoding="utf-8") as f:
     writer.writerow(["source", "log_message"])  # Headers jo tera Gradio app expect kar raha hai
     writer.writerows(data)
 
-print("✅ test_logs.csv successfully generated with 200 logs!")
+print(f"✅ test_logs.csv successfully generated with {TOTAL_LOGS} logs!")
 
 ```
 

@@ -45,6 +45,13 @@ The routing logic automatically evaluates the source system and confidence thres
 
 ---
 
+
+## OutPut
+
+<img width="1555" height="877" alt="image" src="https://github.com/user-attachments/assets/12b3af62-9a75-43ab-a9ed-cdbe6f158361" />
+
+
+
 ## 🛠️ Tech Stack
 
 * **Embeddings & ML:** `sentence-transformers`, `scikit-learn`

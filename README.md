@@ -77,10 +77,10 @@ Upload a CSV containing source and log_message columns. The system will process 
 import csv
 import random
 
-# Teresystems ke sources (LegacyCRM ko alag nikal diya taaki probability control kar sakein)
+
 regular_sources = ["ModernCRM", "ModernHR", "BillingSystem", "AnalyticsEngine", "ThirdPartyAPI"]
 
-# Tier 1: Regex logs (Fast & Standard)
+
 regex_logs = [
     "User admin_{id} logged in.",
     "User staff_{id} logged out.",
@@ -88,7 +88,7 @@ regex_logs = [
     "Backup for database db_{id} completed successfully."
 ]
 
-# Tier 2: BERT logs (Complex Errors / Usage)
+
 bert_logs = [
     "System crashed due to disk I/O failure on node-{node}.",
     "Memory usage exceeded 95% on server-{node}.",
@@ -97,7 +97,7 @@ bert_logs = [
     "Database connection timeout after 5000ms."
 ]
 
-# Tier 3: LLM logs (Legacy / Rare)
+
 legacy_logs = [
     "Case escalation for ticket ID {length} failed — agent offline.",
     "The 'LegacyModule' feature will be deprecated in v5.0.",
@@ -106,7 +106,7 @@ legacy_logs = [
 ]
 
 data = []
-# Generate 20,000 logs taaki 0.3% ratio theek se reflect ho (20k ka 0.3% = 60 logs)
+
 TOTAL_LOGS = 20000
 
 for i in range(TOTAL_LOGS):
@@ -115,14 +115,14 @@ for i in range(TOTAL_LOGS):
         source = "LegacyCRM"
         template = random.choice(legacy_logs)
     else:
-        # Baaki 99.7% time normal sources aayenge
+        
         source = random.choice(regular_sources)
         if random.random() < 0.3:  # Usme se 30% chance Regex ka
             template = random.choice(regex_logs)
         else:                      # Usme se 70% chance BERT ka
             template = random.choice(bert_logs)
         
-    # Variables ko random numbers se replace karna
+  
     msg = template.format(
         id=random.randint(100, 999),
         length=random.randint(1000, 9999),
@@ -132,7 +132,7 @@ for i in range(TOTAL_LOGS):
     
     data.append([source, msg])
 
-# CSV file create karna
+
 with open("test_logs.csv", "w", newline="", encoding="utf-8") as f:
     writer = csv.writer(f)
     writer.writerow(["source", "log_message"])  # Headers jo tera Gradio app expect kar raha hai

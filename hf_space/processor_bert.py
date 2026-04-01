@@ -8,7 +8,7 @@ _embedding_model = None
 _classifier = None
 
 MODEL_PATH = os.path.join(os.path.dirname(__file__), "models", "log_classifier.joblib")
-CONFIDENCE_THRESHOLD = 0.5
+CONFIDENCE_THRESHOLD = 0.3
 
 
 def _load_models():
